@@ -1,0 +1,45 @@
+version: '3'
+services:
+  devbox:
+    container_name: ks-data-ingestor
+    build:
+      context: .
+      dockerfile: devbox.dockerfile
+    volumes:
+        - .:/home/node/app
+        - node_modules:/home/node/app/node_modules
+    environment:
+        - DATABASE_URL=postgres://electrolux:data_ingestor@postgres:5432/data_fountains
+    ports:
+    - "3000:3000"
+    command: ["yarn", "keystone", "dev"]
+    links:
+        - postgres
+  # production-server:
+  #   container_name: service-name
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #       - .:/app
+  #   environment:
+  #       - DATABASE_URL=postgres://user:password@postgres:5432/database-name
+  #   ports:
+  #   - "3000:3000"
+  #   command: ["./dumb-init", "yarn", "start"]
+  #   links:
+  #       - postgres
+  postgres:
+    image: "postgres:12"
+    container_name: "ks-ingestor-postgres"
+    environment:
+        - POSTGRES_USER=electrolux
+        - POSTGRES_PASSWORD=data_ingestor
+        - POSTGRES_DB=data_fountains-name
+    ports:
+      - "5432:5432"
+    volumes:
+      - data:/var/lib/postgresql/data
+volumes:
+  data:
+  node_modules:

@@ -7,8 +7,8 @@ import {
 
 export default config({
   db: {
-    provider: 'sqlite',
-    url: 'file:./keystone.db',
+    provider: 'postgresql',
+    url: 'postgres://electrolux:data_ingestor@postgres:5432/data_fountains',
   },
   lists: {
     Quantity: list({
